@@ -762,7 +762,7 @@ Node *ResourceImporterScene::_pre_fix_node(Node *p_node, Node *p_root, HashMap<R
 					_pre_gen_shape_list(mesh, shapes, true);
 					r_collision_map[mesh] = shapes;
 				} else if (_teststr(name, "areaonly")) {
-					_pre_gen_shape_list(mesh, shapes, false);
+					_pre_gen_shape_list(mesh, shapes, true);
 					r_collision_map[mesh] = shapes;
 				} else if (_teststr(name, "animonly")) {
 					_pre_gen_shape_list(mesh, shapes, false);
