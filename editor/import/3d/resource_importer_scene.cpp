@@ -57,7 +57,6 @@
 #include "scene/resources/packed_scene.h"
 #include "scene/resources/resource_format_text.h"
 #include "scene/resources/surface_tool.h"
-#include "scene/3d/physics/animatable_body_3d.h"
 
 uint32_t EditorSceneFormatImporter::get_import_flags() const {
 	uint32_t ret;
@@ -729,7 +728,7 @@ Node *ResourceImporterScene::_pre_fix_node(Node *p_node, Node *p_root, HashMap<R
 		}
 	}
 
-	if (_teststr(name, "colonly") || _teststr(name, "convcolonly") || _teststr(name, "areaonly") || _teststr(name, "animonly")) {
+	if (_teststr(name, "colonly") || _teststr(name, "convcolonly") || _teststr(name, "areaonly")) {
 		if (isroot) {
 			return p_node;
 		}
@@ -741,9 +740,7 @@ Node *ResourceImporterScene::_pre_fix_node(Node *p_node, Node *p_root, HashMap<R
 			fixed_name = _fixstr(name, "convcolonly");
 		} else if (_teststr(name, "areaonly")) {
 			fixed_name = _fixstr(name, "areaonly");
-		} else if (_teststr(name, "animonly")) {
-			fixed_name = _fixstr(name, "animonly");
-		}
+		} 
 
 		if (fixed_name.is_empty()) {
 			p_node->set_owner(nullptr);
@@ -768,25 +765,11 @@ Node *ResourceImporterScene::_pre_fix_node(Node *p_node, Node *p_root, HashMap<R
 				} else if (_teststr(name, "areaonly")) {
 					_pre_gen_shape_list(mesh, shapes, true);
 					r_collision_map[mesh] = shapes;
-				} else if (_teststr(name, "animonly")) {
-					_pre_gen_shape_list(mesh, shapes, false);
-					r_collision_map[mesh] = shapes;
 				}
 
 				if (shapes.size()) {
 					if (_teststr(name, "areaonly")) {
 						Area3D* col = memnew(Area3D);
-						col->set_transform(mi->get_transform());
-						col->set_name(fixed_name);
-						_copy_meta(p_node, col);
-						p_node->replace_by(col);
-						p_node->set_owner(nullptr);
-						memdelete(p_node);
-						p_node = col;
-
-						_add_shapes(col, shapes);
-					} else if (_teststr(name, "animonly")) {
-						AnimatableBody3D* col = memnew(AnimatableBody3D);
 						col->set_transform(mi->get_transform());
 						col->set_name(fixed_name);
 						_copy_meta(p_node, col);
